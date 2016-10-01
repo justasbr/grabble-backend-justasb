@@ -91,7 +91,15 @@ routes.post('/submitword', function (req, res) {
 });
 
 routes.get('/leaderboard', function (req, res) {
-  res.json({})
+  User.find({}).sort({totalPoints: -1})
+    .limit(5).select('id totalPoints -_id')
+    .exec(function (err, leaderboard) {
+      if (!err) {
+        res.json({leaderboard: leaderboard});
+      } else {
+        res.status(400).json({err: 'Could not get leaderboard'});
+      }
+    });
 });
 
 routes.get('/placemarks', function (req, res) {
