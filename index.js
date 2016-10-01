@@ -6,7 +6,7 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 var routes = require('./app/routes');
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/test');
 
 app.use(morgan('dev')); // log every request to the console
 app.use(bodyParser.json());
