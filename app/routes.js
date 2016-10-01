@@ -18,7 +18,18 @@ routes.get('/profile', function (req, res) {
 });
 
 routes.get('/inventory', function (req, res) {
-  res.json({})
+  var userId = req.query.id || null;
+  if (!userId) {
+    res.status(400).json({err: 'User ID not specified'});
+  } else {
+    User.findOne({'id': userId}, function (err, user) {
+      if (!user) {
+        res.status(400).send({err: 'Could not get user.'})
+      } else {
+        res.json({inventory: user.inventory});
+      }
+    });
+  }
 });
 
 routes.post('/grabletter', function (req, res) {
