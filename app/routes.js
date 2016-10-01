@@ -6,6 +6,7 @@ var _ = require('lodash');
 var updateInventory = require('./utility').updateInventory;
 var containsLetters = require('./utility').containsLetters;
 var wordSet = require('./wordSet');
+var placemarks = require('./placemarks');
 
 routes.get('/profile', function (req, res) {
   var userId = req.query.id || null;
@@ -102,8 +103,6 @@ routes.get('/leaderboard', function (req, res) {
     });
 });
 
-routes.get('/placemarks', function (req, res) {
-  res.json({})
-});
+routes.use('/placemarks', placemarks);
 
 module.exports = routes;

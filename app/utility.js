@@ -20,6 +20,12 @@ exports.containsLetters = function containsLetters(inventory, word) {
   });
 };
 
+exports.includes = Array.prototype.includes = function(array, element){
+  return array.indexOf(element) > -1;
+};
+
+exports.daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
 function createLetterMap(word) {
   var map = {};
   var letterList = word.split("");
@@ -28,4 +34,4 @@ function createLetterMap(word) {
     map[letter] = currentCount + 1;
   });
   return map;
-};
+}
