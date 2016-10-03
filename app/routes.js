@@ -5,6 +5,7 @@ var User = require('./models/user');
 var _ = require('lodash');
 var updateInventory = require('./utility').updateInventory;
 var containsLetters = require('./utility').containsLetters;
+var valueOf = require('./models/letterValues').valueOf;
 var wordSet = require('./wordSet');
 var placemarks = require('./placemarks');
 
@@ -75,9 +76,19 @@ routes.post('/submitword', function (req, res) {
           res.status(400).json({err: 'Invalid user id.'});
         } else {
           //Valid user and valid word
-          if (containsLetters(user.inventory, word)) {
-            var newInventory = updateInventory(user.inventory, word, _.subtract);
+          if (containsLetters(user.get('inventory'), word)) {
+            var valueOfWord = valueOf(word);
+            var newInventory = updateInventory(user.get('inventory'), word, _.subtract);
+
             user.set('inventory', newInventory);
+            user.set('totalWords', user.get('totalWords') + 1);
+            user.set('totalPoints', user.get('totalPoints') + valueOfWord);
+
+            if (valueOf(word) > user.get('bestScore')){
+              user.set('bestScore', valueOfWord);
+              user.set('bestWord', word);
+            }
+
             user.save();
             res.send(user);
           } else {
