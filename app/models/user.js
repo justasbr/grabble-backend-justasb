@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var userSchema = Schema({
   id: {type: String, unique: true, required: true},
   name: {type: String, unique: true, required: true},
-  totalPoints: {type: Number, unique: false, default: 0, required: true, min: 0},
+  totalPoints: {type: Number, required: true, default: 0, min: 0},
 });
 
 module.exports = mongoose.model('User', userSchema);

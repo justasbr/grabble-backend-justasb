@@ -1,6 +1,7 @@
 const routes = require('express').Router();
 
 var User = require('./models/user');
+var Submission = require('./models/submission');
 
 var _ = require('lodash');
 var containsLetters = require('./utility').containsLetters;
@@ -10,8 +11,13 @@ var placemarks = require('./placemarks');
 
 var leaderboard = require('./leaderboard');
 
-routes.get('/new_user', function (req, res) {
-  res.status(500).json({});
+routes.post('/new_user', function (req, res) {
+  var userId = req.body.id;
+  var userName = req.body.name;
+
+  var user = new User({id: userId, name: userName});
+  user.save();
+  res.send(user);
 });
 
 routes.get('/random_name', function (req, res) {
@@ -46,20 +52,36 @@ routes.post('/submitword', function (req, res) {
           res.status(400).json({err: 'Invalid user id.'});
         } else {
           //Valid user and valid word
-          if (containsLetters(user.get('inventory'), word)) {
-            user.set('totalPoints', user.get('totalPoints') + valueOf(word));
+          // if (containsLetters(user.get('inventory'), word)) {
+          var score = valueOf(word);
 
-            user.save();
-            res.send(user);
-          } else {
-            res.status(400).json({err: 'Not enough letters to complete word.'})
-          }
+          user.set('totalPoints', user.get('totalPoints') + score);
+
+          var newSubmission = new Submission({name: user.name, score: score});
+
+          user.save();
+          newSubmission.save();
+
+          res.send(user);
         }
       })
+
+
     } else {
       res.status(400).json({err: 'Invalid word.'});
     }
   }
+});
+
+routes.get('/submissions', function (req, res) {
+  Submission.find({}).exec(
+    function (err, submissions) {
+      if (!err) {
+        res.json({submissions: submissions});
+      } else {
+        res.status(400).json({err: err});
+      }
+    })
 });
 
 routes.use('/leaderboard', leaderboard);
