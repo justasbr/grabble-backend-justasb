@@ -32,8 +32,8 @@ function dayOfWeek(date) {
   var offsetToGmt = 60 + date.getTimezoneOffset();
   var offsetInMillis = offsetToGmt * 60 * 1000;
 
-  var nowGMT = new Date(date.getTime() + offsetInMillis);
-  return daysOfWeek[nowGMT.getDay()];
+  var now = new Date(date.getTime() + offsetInMillis);
+  return daysOfWeek[now.getDay()];
 }
 
 function getPlacemarks(dayOfWeek) {

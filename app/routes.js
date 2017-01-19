@@ -9,6 +9,8 @@ var valueOf = require('./models/letterValues').valueOf;
 var wordSet = require('./wordSet');
 var placemarks = require('./placemarks');
 
+var leaderboard = require('./leaderboard');
+
 routes.get('/profile', function (req, res) {
   var userId = req.query.id || null;
   if (!userId) {
@@ -63,17 +65,7 @@ routes.post('/submitword', function (req, res) {
   }
 });
 
-routes.get('/leaderboard', function (req, res) {
-  User.find({}).sort({totalPoints: -1})
-    .limit(5).select('id totalPoints -_id')
-    .exec(function (err, leaderboard) {
-      if (!err) {
-        res.json({leaderboard: leaderboard});
-      } else {
-        res.status(400).json({err: 'Could not get leaderboard'});
-      }
-    });
-});
+routes.use('/leaderboard', leaderboard);
 
 routes.use('/placemarks', placemarks);
 
