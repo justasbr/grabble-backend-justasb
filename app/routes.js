@@ -10,6 +10,14 @@ var placemarks = require('./placemarks');
 
 var leaderboard = require('./leaderboard');
 
+routes.get('/new_user', function (req, res) {
+  res.status(500).json({});
+});
+
+routes.get('/random_name', function (req, res) {
+  res.status(500).json({});
+});
+
 routes.get('/profile', function (req, res) {
   var userId = req.query.id || null;
   if (!userId) {
