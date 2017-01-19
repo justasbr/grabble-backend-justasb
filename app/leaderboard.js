@@ -30,7 +30,7 @@ routes.get('/today', function (req, res) {
 
         res.json({leaderboard: topScores});
       } else {
-        res.status(400).json({err: err});
+        res.status(400).json({err: 'Could not get leaderboard.'});
       }
     })
 });
@@ -38,12 +38,12 @@ routes.get('/today', function (req, res) {
 //All-time leaderboard
 routes.get('/', function (req, res) {
   User.find({}).sort({totalPoints: -1})
-    .limit(10).select('id totalPoints -_id')
+    .limit(10).select('name totalPoints -_id')
     .exec(function (err, leaderboard) {
       if (!err) {
         res.json({leaderboard: leaderboard});
       } else {
-        res.status(400).json({err: 'Could not get leaderboard'});
+        res.status(400).json({err: 'Could not get leaderboard.'});
       }
     });
 });
