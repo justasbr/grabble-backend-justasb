@@ -4,7 +4,6 @@ var User = require('./models/user');
 var Submission = require('./models/submission');
 
 var _ = require('lodash');
-var containsLetters = require('./utility').containsLetters;
 var valueOf = require('./models/letterValues').valueOf;
 var wordSet = require('./wordSet');
 var placemarks = require('./placemarks');
@@ -51,12 +50,9 @@ routes.post('/submitword', function (req, res) {
         if (!user) {
           res.status(400).json({err: 'Invalid user id.'});
         } else {
-          //Valid user and valid word
-          // if (containsLetters(user.get('inventory'), word)) {
           var score = valueOf(word);
 
           user.set('totalPoints', user.get('totalPoints') + score);
-
           var newSubmission = new Submission({name: user.name, score: score});
 
           user.save();

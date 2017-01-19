@@ -1,26 +1,5 @@
-var alphabet = require('./alphabet');
-var _ = require('lodash');
-
-exports.containsLetters = function containsLetters(inventory, word) {
-  var wordLetterMap = createLetterMap(word);
-  return _.every(wordLetterMap, function (countInWord, letter) {
-    var countInInventory = inventory[letter] || 0;
-    return countInInventory >= countInWord;
-  });
-};
-
-exports.includes = Array.prototype.includes = function(array, element){
+exports.includes = Array.prototype.includes = function (array, element) {
   return array.indexOf(element) > -1;
 };
 
 exports.daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-
-function createLetterMap(word) {
-  var map = {};
-  var letterList = word.split("");
-  letterList.map(letter => {
-    var currentCount = map[letter] || 0;
-    map[letter] = currentCount + 1;
-  });
-  return map;
-}
