@@ -1,17 +1,6 @@
 var alphabet = require('./alphabet');
 var _ = require('lodash');
 
-exports.updateInventory = function updateInventory(oldInventory, letters, updateFunc) {
-  var newInventory = {};
-  var charMap = createLetterMap(letters);
-  _.forEach(alphabet, function (letter) {
-    var countInInventory = oldInventory[letter] || 0;
-    var countInWord = charMap[letter] || 0;
-    newInventory[letter] = updateFunc(countInInventory, countInWord);
-  });
-  return newInventory;
-};
-
 exports.containsLetters = function containsLetters(inventory, word) {
   var wordLetterMap = createLetterMap(word);
   return _.every(wordLetterMap, function (countInWord, letter) {
