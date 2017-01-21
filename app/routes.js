@@ -7,6 +7,7 @@ var _ = require('lodash');
 var valueOf = require('./models/letterValues').valueOf;
 var wordSet = require('./wordSet');
 var placemarks = require('./placemarks');
+var nameGenerator = require('./nameGenerator');
 
 var leaderboard = require('./leaderboard');
 
@@ -19,8 +20,9 @@ routes.post('/new_user', function (req, res) {
   res.send(user);
 });
 
-routes.get('/random_name', function (req, res) {
-  res.status(500).json({});
+routes.get('/random_username', function (req, res) {
+  var username = nameGenerator.getFullUsername() || "";
+  res.json({name: username});
 });
 
 routes.get('/profile', function (req, res) {
