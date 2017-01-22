@@ -12,12 +12,26 @@ var nameGenerator = require('./nameGenerator');
 var leaderboard = require('./leaderboard');
 
 routes.post('/new_user', function (req, res) {
-  var userId = req.body.id;
-  var userName = req.body.name;
+  var id = req.body.id || null;
+  var name = req.body.name || null;
 
-  var user = new User({id: userId, name: userName});
-  user.save();
-  res.send(user);
+  if (!id || !name) {
+    res.status(400).json({err: "Did not receive enough information to register a new user."})
+  }
+
+  User.findOne({'id': id}, function (err, user) {
+    if (err) {
+      res.status(500).json({});
+    } else {
+      if (!user) {
+        user = new User({id: id, name: name});
+      } else {
+        user.set('name', name);
+      }
+      user.save();
+      res.send(user);
+    }
+  });
 });
 
 routes.get('/random_username', function (req, res) {
