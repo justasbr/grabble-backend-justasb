@@ -11,25 +11,36 @@ var nameGenerator = require('./nameGenerator');
 
 var leaderboard = require('./leaderboard');
 
-routes.post('/new_user', function (req, res) {
+routes.post('/new_user', function (req, res, next) {
   var id = req.body.id || null;
   var name = req.body.name || null;
 
   if (!id || !name) {
-    res.status(400).json({err: "Did not receive enough information to register a new user."})
+    res.status(400).json({err: "Did not receive enough information to register a new user."});
+    return next();
   }
 
-  User.findOne({'id': id}, function (err, user) {
+  User.findOne({'name': name}, function (err, user) {
     if (err) {
-      res.status(500).json({});
-    } else {
-      if (!user) {
-        user = new User({id: id, name: name});
+      res.status(500).json({err: 'Server error.'});
+    } else if (user) {
+      if (user.id != id) {
+        res.status(400).json({err: 'Username already exists.'});
       } else {
-        user.set('name', name);
+        res.send(user);
       }
-      user.save();
-      res.send(user);
+    } else {
+      User.findOne({'id': id}, function (err, user) {
+        if (err) {
+          res.status(500).json({err: 'Server error.'});
+        } else if (user) {
+          user.set('name', name);
+        } else {
+          user = new User({id: id, name: name});
+        }
+        user.save();
+        res.send(user);
+      });
     }
   });
 });
