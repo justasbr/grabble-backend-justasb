@@ -16,23 +16,23 @@ routes.post('/new_user', function (req, res, next) {
   var name = req.body.name || null;
 
   if (!id || !name) {
-    res.status(400).json({err: "Did not receive enough information to register a new user."});
+    res.status(400).json({message: "Did not receive enough information to register a new user."});
     return next();
   }
 
   User.findOne({'name': name}, function (err, user) {
     if (err) {
-      res.status(500).json({err: 'Server error.'});
+      res.status(500).json({message: 'Server error.'});
     } else if (user) {
       if (user.id != id) {
-        res.status(400).json({err: 'Username already exists.'});
+        res.status(400).json({message: 'Username already exists.'});
       } else {
         res.send(user);
       }
     } else {
       User.findOne({'id': id}, function (err, user) {
         if (err) {
-          res.status(500).json({err: 'Server error.'});
+          res.status(500).json({message: 'Server error.'});
         } else if (user) {
           user.set('name', name);
         } else {
@@ -53,7 +53,7 @@ routes.get('/random_username', function (req, res) {
 routes.get('/profile', function (req, res) {
   var userId = req.query.id || null;
   if (!userId) {
-    res.status(400).json({err: 'User ID not specified'});
+    res.status(400).json({message: 'User ID not specified'});
   } else {
     User.findOne({'id': userId}, function (err, user) {
       if (!user) {
@@ -66,16 +66,16 @@ routes.get('/profile', function (req, res) {
 });
 
 routes.post('/submitword', function (req, res) {
-  var userId = req.body.id;
-  var word = req.body.word;
+  var userId = req.body.id || "";
+  var word = req.body.word || "";
   if (!userId || !word) {
-    res.status(400).json({err: 'Did not receive enough information.'});
+    res.status(400).json({message: 'Did not receive enough information.'});
   } else {
-    var validWord = wordSet.has(word);
+    var validWord = wordSet.has(word.toLowerCase());
     if (validWord) {
       User.findOne({'id': userId}, function (err, user) {
         if (!user) {
-          res.status(400).json({err: 'Invalid user id.'});
+          res.status(400).json({message: 'Invalid user id.'});
         } else {
           var score = valueOf(word);
 
@@ -88,10 +88,8 @@ routes.post('/submitword', function (req, res) {
           res.send(user);
         }
       })
-
-
     } else {
-      res.status(400).json({err: 'Invalid word.'});
+      res.status(400).json({message: 'Invalid word.'});
     }
   }
 });
@@ -102,7 +100,7 @@ routes.get('/submissions', function (req, res) {
       if (!err) {
         res.json({submissions: submissions});
       } else {
-        res.status(400).json({err: err});
+        res.status(400).json({message: err});
       }
     })
 });

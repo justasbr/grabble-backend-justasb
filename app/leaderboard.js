@@ -30,7 +30,7 @@ routes.get('/today', function (req, res) {
 
         res.json({leaderboard: topScores});
       } else {
-        res.status(400).json({err: 'Could not get leaderboard.'});
+        res.status(400).json({message: 'Could not get leaderboard.'});
       }
     })
 });
@@ -43,7 +43,7 @@ routes.get('/', function (req, res) {
       if (!err) {
         res.json({leaderboard: leaderboard});
       } else {
-        res.status(400).json({err: 'Could not get leaderboard.'});
+        res.status(400).json({message: 'Could not get leaderboard.'});
       }
     });
 });

@@ -21,10 +21,10 @@ routes.get('/:day?', function(req,res) {
     });
 
     placemarks.onError(function onError() {
-      res.status(500).json({err: 'Could not get placemarks.'});
+      res.status(500).json({message: 'Could not get placemarks.'});
     });
   } else {
-    res.status(400).json({err: 'Invalid day.'})
+    res.status(400).json({message: 'Invalid day.'})
   }
 });
 
