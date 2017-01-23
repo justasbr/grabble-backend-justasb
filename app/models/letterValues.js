@@ -30,6 +30,7 @@ var values = {
 };
 
 exports.valueOf = function valueOf(string) {
+  string = (string || "").toLowerCase();
   var value = 0;
   var letters = string.split('');
   _.forEach(letters, function (letter) {
