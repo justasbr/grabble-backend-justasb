@@ -12,4 +12,19 @@ describe('WordSet', function () {
     wordSet.forEach(word => word.length.should.equal(7));
     done();
   });
+
+  it('should contain a valid word', function (done) {
+    wordSet.has("student").should.be.true;
+    done();
+  });
+
+  it('should not contain an valid word', function (done) {
+    wordSet.has("abcde").should.be.false;
+    done();
+  });
+
+  it('should not contain null', function (done) {
+    wordSet.has(null).should.be.false;
+    done();
+  });
 });
