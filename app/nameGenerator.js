@@ -22,6 +22,10 @@ Generator.getFullUsername = function () {
   return capitalize(reduceWhitespace(username));
 };
 
+Generator.getRandomId = function () {
+  return Math.random().toString(36);
+};
+
 function pickRandom(arr) {
   if (arr && arr.length > 0) {
     return arr[Math.floor(Math.random() * arr.length)];

@@ -25,8 +25,7 @@ routes.get('/today', function (req, res) {
             name: name,
             totalPoints: _.sumBy(subms, 'score')
           }))
-          .orderBy('totalPoints', 'desc')
-          .slice(start = 0, end = 10);
+          .orderBy('totalPoints', 'desc');
 
         res.json({leaderboard: topScores});
       } else {
@@ -38,7 +37,7 @@ routes.get('/today', function (req, res) {
 //All-time leaderboard
 routes.get('/', function (req, res) {
   User.find({}).sort({totalPoints: -1})
-    .limit(10).select('name totalPoints -_id')
+    .select('name totalPoints -_id')
     .exec(function (err, leaderboard) {
       if (!err) {
         res.json({leaderboard: leaderboard});
