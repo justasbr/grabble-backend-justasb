@@ -76,30 +76,28 @@ describe('Leaderboard', function () {
     var WORD = "StuDenT";
     var WORD_SCORE = 40;
 
-    chai.request(server).get('/leaderboard/today')
-      .end((err, res) => {
-        var currentScore;
-        var leaderboard = res.body.leaderboard;
-        leaderboard.forEach(function (entry) {
-          if (entry.name == userName) {
-            currentScore = entry.totalPoints;
-          }
-        });
+    var currentScore = 0;
 
-        chai.request(server).post('/submitword').send({id: userId, word: WORD})
-          .end(() => {
-            chai.request(server).get('/leaderboard/today')
-              .end((err, res) => {
-                var leaderboard = res.body.leaderboard;
-                leaderboard.forEach(function (entry) {
-                  if (entry.name == userName) {
-                    entry.totalPoints.should.equal(currentScore + WORD_SCORE);
-                    done();
-                  }
-                })
-              })
-          })
+    chai.request(server).get('/leaderboard/today').end((err, res) => {
+      var leaderboard = res.body.leaderboard;
+      leaderboard.forEach(entry => {
+        if (entry.name == userName) {
+          currentScore = parseInt(entry.totalPoints);
+        }
       });
+
+      chai.request(server).post('/submitword').send({id: userId, word: WORD}).end(() => {
+        chai.request(server).get('/leaderboard/today').end((err, res) => {
+          var leaderboard = res.body.leaderboard;
+          leaderboard.forEach(function (entry) {
+            if (entry.name == userName) {
+              entry.totalPoints.should.equal(currentScore + WORD_SCORE);
+              done();
+            }
+          })
+        })
+      })
+    });
   });
 });
 
