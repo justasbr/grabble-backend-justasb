@@ -50,21 +50,6 @@ routes.get('/random_username', function (req, res) {
   res.json({name: username});
 });
 
-routes.get('/profile', function (req, res) {
-  var userId = req.query.id || null;
-  if (!userId) {
-    res.status(400).json({message: 'User ID not specified'});
-  } else {
-    User.findOne({'id': userId}, function (err, user) {
-      if (!user) {
-        user = new User({id: userId});
-        user.save();
-      }
-      res.send(user);
-    });
-  }
-});
-
 routes.post('/submitword', function (req, res) {
   var userId = req.body.id || "";
   var word = req.body.word || "";
@@ -92,17 +77,6 @@ routes.post('/submitword', function (req, res) {
       res.status(400).json({message: 'Invalid word.'});
     }
   }
-});
-
-routes.get('/submissions', function (req, res) {
-  Submission.find({}).exec(
-    function (err, submissions) {
-      if (!err) {
-        res.json({submissions: submissions});
-      } else {
-        res.status(400).json({message: err});
-      }
-    })
 });
 
 routes.use('/leaderboard', leaderboard);
